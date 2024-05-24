@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="Actividad3Mapas.css">
+    <title>Mapas</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mostrar la fecha actual
+            var today = new Date();
+            var date = today.toLocaleDateString();
+            document.getElementById('currentDate').innerText = 'Fecha de hoy: ' + date;
+
+            // Obtener la ubicación actual del usuario
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                document.getElementById('location').innerText = 'La geolocalización no es soportada por este navegador.';
+            }
+
+            // Agregar eventos para los formularios
+            document.getElementById('registerDateForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Evitar el envío del formulario
+                alert('Fecha guardada exitosamente');
+            });
+
+            document.getElementById('registerAddressForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Evitar el envío del formulario
+                alert('Dirección guardada exitosamente');
+            });
+
+            document.getElementById('registerNameForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Evitar el envío del formulario
+                alert('Nombre guardado exitosamente');
+            });
+
+            document.getElementById('registerLastNameForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Evitar el envío del formulario
+                alert('Apellido guardado exitosamente');
+            });
+        });
+
+        function showPosition(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            // Geocodificación inversa para obtener la dirección
+            var geocoder = new google.maps.Geocoder();
+            var latlng = new google.maps.LatLng(lat, lon);
+
+            geocoder.geocode({ 'location': latlng }, function(results, status) {
+                if (status === 'OK') {
+                    if (results[0]) {
+                        document.getElementById('location').innerText = 'Ubicación actual: ' + results[0].formatted_address;
+                    } else {
+                        document.getElementById('location').innerText = 'No se encontraron resultados.';
+                    }
+                } else {
+                    document.getElementById('location').innerText = 'Geocoder falló debido a: ' + status;
+                }
+            });
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById('location').innerText = 'El usuario negó la solicitud de geolocalización.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById('location').innerText = 'La información de ubicación no está disponible.';
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById('location').innerText = 'La solicitud de geolocalización expiró.';
+                    break;
+                case error.UNKNOWN_ERROR:
+                    document.getElementById('location').innerText = 'Se produjo un error desconocido.';
+                    break;
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Mapa de registro</h1>
+    </div>
+    <div id="currentDate" class="container">
+        <!-- Aquí se mostrará la fecha actual -->
+    </div>
+    <div id="location" class="container">
+        <!-- Aquí se mostrará la ubicación actual -->
+    </div>
+    <div class="contenedorgeneral">
+
+        <div class="container">
+            <iframe src="https://www.google.com/maps/d/embed?mid=1opx_g8myck-RzM2scrsRwRizFTsKdic&ehbc=2E312F&noprof=1" width="640" height="480"></iframe>
+        </div>
+
+        <div id="subcontenedor">
+            <div class="container">
+                <h2>Registrar una fecha</h2>
+                <form id="registerDateFo    rm">
+                    <label for="registerDate">Fecha:</label>
+                    <input type="date" id="registerDate" name="registerDate">
+                    <button type="submit">Registrar</button>
+                </form>
+            </div>
+            <div class="container">
+                <h2>Registrar una dirección</h2>
+                <form id="registerAddressForm">
+                    <label for="registerAddress">Dirección:</label>
+                    <input type="text" id="registerAddress" name="registerAddress" placeholder="Ingrese su dirección">
+                    <button type="submit">Registrar</button>
+                </form>
+            </div>
+            <div class="container">
+                <h2>Registrar un nombre</h2>
+                <form id="registerNameForm">
+                    <label for="registerName">Nombre:</label>
+                    <input type="text" id="registerName" name="registerName" placeholder="Ingrese su nombre">
+                    <button type="submit">Registrar</button>
+                </form>
+            </div>
+            <div class="container">
+                <h2>Registrar un apellido</h2>
+                <form id="registerLastNameForm">
+                    <label for="registerLastName">Apellido:</label>
+                    <input type="text" id="registerLastName" name="registerLastName" placeholder="Ingrese su apellido">
+                    <button type="submit">Registrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
